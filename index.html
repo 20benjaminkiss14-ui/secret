@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>System Scan</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Consolas, monospace;
+}
+
+body{
+    background:#000;
+    color:#00ff66;
+    overflow:hidden;
+}
+
+#terminal{
+    padding:20px;
+    white-space:pre-wrap;
+    font-size:18px;
+    line-height:1.5;
+}
+
+.cursor{
+    display:inline-block;
+    width:10px;
+    background:#00ff66;
+    animation:blink .8s infinite;
+}
+
+@keyframes blink{
+    50%{opacity:0;}
+}
+
+#glitch{
+    position:absolute;
+    inset:0;
+    display:none;
+    justify-content:center;
+    align-items:center;
+    background:black;
+    color:#ff2f6d;
+    font-size:42px;
+    text-align:center;
+    animation:glitch .15s infinite;
+}
+
+@keyframes glitch{
+    0%{transform:translate(2px,-2px);}
+    25%{transform:translate(-2px,2px);}
+    50%{transform:translate(2px,2px);}
+    75%{transform:translate(-2px,-2px);}
+    100%{transform:translate(0);}
+}
+</style>
+</head>
+
+<body>
+
+<div id="terminal"></div>
+
+<div id="glitch">
+<div id="finalText"></div>
+</div>
+
+<script>
+
+const HER_NAME = "Ava"; 
+
+const lines = [
+"Initializing LoveOS v1.0...",
+"",
+"Connecting to satellite...",
+"Connection secured.",
+"",
+"Scanning Earth...",
+"",
+"Population found: 8,200,000,000",
+"",
+"Searching for the prettiest girl...",
+"",
+];
+
+const terminal = document.getElementById("terminal");
+
+let i = 0;
+
+function typeLine(){
+
+    if(i >= lines.length){
+        fakeLoading();
+        return;
+    }
+
+    let text = lines[i];
+    let j = 0;
+
+    let interval = setInterval(()=>{
+
+        terminal.innerHTML += text[j] || "";
+
+        j++;
+
+        if(j > text.length){
+            clearInterval(interval);
+            terminal.innerHTML += "\n";
+            i++;
+            setTimeout(typeLine,300);
+        }
+
+    },35);
+
+}
+
+function fakeLoading(){
+
+    let percent = 0;
+
+    terminal.innerHTML += "\nProgress: ";
+
+    let loading = setInterval(()=>{
+
+        percent++;
+
+        terminal.innerHTML =
+        terminal.innerHTML.replace(/Progress:.*/,"Progress: "+percent+"%");
+
+        if(percent >= 100){
+
+            clearInterval(loading);
+
+            setTimeout(reveal,700);
+
+        }
+
+    },35);
+
+}
+
+function reveal(){
+
+    document.body.style.background="#111";
+
+    terminal.style.display="none";
+
+    const glitch = document.getElementById("glitch");
+
+    glitch.style.display="flex";
+
+    setTimeout(()=>{
+
+        glitch.style.animation="none";
+
+        glitch.innerHTML=`
+<h1 style="font-size:52px;">MATCH FOUND ❤️</h1>
+
+<p style="margin-top:25px;font-size:24px;">
+Name: <b>${HER_NAME}</b><br><br>
+
+Beauty.exe ............. 100%<br>
+Smile.exe .............. 100%<br>
+Cute.exe ............... 100%<br>
+Makes me happy.exe ..... 100%<br><br>
+
+SYSTEM MESSAGE:<br><br>
+
+You somehow hacked<br>
+your way into my heart.
+❤️
+</p>
+`;
+
+    },1800);
+
+}
+
+typeLine();
+
+</script>
+
+</body>
+</html>
